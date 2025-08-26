@@ -1,6 +1,9 @@
+/* =======================
+   General Styles
+======================= */
 body {
-  background-color: black;
-  color: white;
+  background-color: #000;
+  color: #fff;
   font-family: 'Dancing Script', cursive;
   padding: 20px;
   margin: 0;
@@ -15,12 +18,14 @@ h1 {
   text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
 }
 
-/* Buttons */
+/* =======================
+   Buttons
+======================= */
 .month-toggle-btn, .season-btn {
   font-family: 'Dancing Script', cursive;
   font-size: 2.2rem;
   background: transparent;
-  color: white;
+  color: #fff;
   border: 2px solid limegreen;
   border-radius: 20px;
   cursor: pointer;
@@ -70,7 +75,9 @@ h1 {
   border-radius: 6px;
 }
 
-/* Dropdowns */
+/* =======================
+   Dropdowns
+======================= */
 .parlays-dropdown {
   display: none;
   background: linear-gradient(135deg, #111 0%, #1a1a1a 100%);
@@ -87,7 +94,9 @@ h1 {
   display: block;
 }
 
-/* Parlay cards */
+/* =======================
+   Parlay Cards
+======================= */
 .parlay {
   opacity: 0;
   transform: scaleY(0);
@@ -99,13 +108,29 @@ h1 {
   border: 3px solid;
 }
 
-.parlay.show { opacity:1; transform: scaleY(1); }
+.parlay.show { 
+  opacity: 1; 
+  transform: scaleY(1); 
+}
 
-.parlay.won { border-color: limegreen; background: linear-gradient(135deg, #1a1a1a 0%, #0f2f0f 100%); }
-.parlay.lost { border-color: #ff4444; background: linear-gradient(135deg, #1a1a1a 0%, #2f0f0f 100%); }
+.parlay.won { 
+  border-color: limegreen; 
+  background: linear-gradient(135deg, #1a1a1a 0%, #0f2f0f 100%); 
+}
+
+.parlay.lost { 
+  border-color: #ff4444; 
+  background: linear-gradient(135deg, #1a1a1a 0%, #2f0f0f 100%); 
+}
 
 .parlay-body { padding: 16px; }
-.parlay-footer { background: rgba(255,255,255,0.05); padding: 12px 16px; border-top: 1px solid #444; text-align: center; font-weight: bold; }
+.parlay-footer { 
+  background: rgba(255,255,255,0.05); 
+  padding: 12px 16px; 
+  border-top: 1px solid #444; 
+  text-align: center; 
+  font-weight: bold; 
+}
 
 .parlay .match {
   display: flex;
@@ -120,16 +145,29 @@ h1 {
   border-left: 4px solid #666;
 }
 
-.parlay .match.won { color: limegreen; border-left-color: limegreen; background: rgba(0,255,0,0.2); }
-.parlay .match.lost { color: #ff6b6b; border-left-color: #ff6b6b; background: rgba(255,0,0,0.2); }
+.parlay .match.won { 
+  color: limegreen; 
+  border-left-color: limegreen; 
+  background: rgba(0,255,0,0.2); 
+}
+
+.parlay .match.lost { 
+  color: #ff6b6b; 
+  border-left-color: #ff6b6b; 
+  background: rgba(255,0,0,0.2); 
+}
 
 .match-info { flex: 1; display: flex; flex-direction: column; gap: 2px; }
 .match-teams { font-weight: bold; font-size: 1rem; }
 .match-pick-result { font-size: 0.9rem; opacity: 0.9; display: flex; align-items: center; gap: 6px; }
 .match-odds { font-weight: bold; padding: 8px 12px; background: rgba(255,255,255,0.2); border-radius: 6px; min-width: 50px; text-align: center; }
+
 .parlay.won .match-odds { background: rgba(0,255,0,0.2); color: limegreen; }
 .parlay.lost .match-odds { background: rgba(255,0,0,0.2); color: #ff6b6b; }
 
+/* =======================
+   Date Divider
+======================= */
 .date-divider {
   text-align: center;
   font-size: 1.8rem;
@@ -143,7 +181,9 @@ h1 {
   font-family: Arial, sans-serif;
 }
 
-/* Responsive */
+/* =======================
+   Responsive
+======================= */
 @media (max-width: 768px) {
   body { padding: 15px; }
   h1 { font-size: 2.2em; margin-bottom: 15px; }
@@ -170,7 +210,6 @@ h1 {
   .bank-display { font-size: 1.1rem; }
 }
 
-/* Desktop large screen */
 @media (min-width: 800px) {
   #monthButtons { display: flex; flex-direction: column; align-items: center; max-width: 900px; margin: 0 auto; }
   .month-toggle-btn, .season-btn, .parlays-dropdown { max-width: 800px; width: 100%; }

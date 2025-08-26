@@ -1,6 +1,6 @@
 // 🔹 Google Sheet ID & sheet
 const sheetID = "2PACX-1vSbcPcRbgUdW1O-TF-kKKFERDDZKZudEyaQ8w6oewMpSNnFIyfrhKxF1tL96f3mfpzFISvgabB3qUpu";
-const SHEET_NAME = "Season 2025-2026"; // default sheet name
+const SHEET_NAME = "season 2025-2026"; // default sheet name
 
 // 🔹 Store data
 let rawData = [];

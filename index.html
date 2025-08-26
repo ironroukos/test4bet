@@ -1,29 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>4Bet | Road to Profit</title>
-  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>4Bet | Road to Profit</title>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>4Bet | Road to Profit</h1>
 
-  <button class="season-btn" id="seasonButton" aria-expanded="false">
-    <span class="season-title">Season 2025/2026</span>
-    <div>
-      <span class="season-stats">
-        <span id="seasonParlayStats">Parlay: Loading...</span> | 
-        <span id="seasonPickStats">Picks: Loading...</span>
-      </span>
-      <div class="bank-display" id="seasonBank">Bank: Loading...</div>
-    </div>
-  </button>
+<h1>4Bet | Road to Profit</h1>
 
-  <div id="seasonDropdown" class="parlays-dropdown"></div>
-  <div id="monthButtons"></div>
+<!-- Season Stats Button -->
+<button class="season-btn" id="seasonButton">
+  <span class="season-title">Season 2025/2026</span>
+  <span class="season-stats">
+    <span id="seasonWins">Parlay W: Loading...</span> | 
+    <span id="seasonLosses">Parlay L: Loading...</span> | 
+    <span id="seasonPickWins">Pick W: Loading...</span> | 
+    <span id="seasonPickLosses">Pick L: Loading...</span> | 
+    <span id="seasonBank">Bank: Loading...</span>
+  </span>
+</button>
 
-  <script src="script.js"></script>
+<!-- Season Dropdown (monthly summary) -->
+<div id="seasonDropdown" class="parlays-dropdown" style="display:none;"></div>
+
+<!-- Month Buttons -->
+<div id="monthButtons"></div>
+
+<!-- Quick Table View (from old project) -->
+<div id="quickTable" style="margin-top:30px;"></div>
+
+<script src="script.js"></script>
 </body>
 </html>

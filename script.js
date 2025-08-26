@@ -121,7 +121,6 @@ function populateSeasonAndMonths() {
   container.innerHTML = "";
 
   const sortedMonths = Object.keys(parlaysByMonth).sort((a,b) => monthDates[a].getTime() - monthDates[b].getTime());
-
   sortedMonths.reverse().forEach(month => {
     let monthParlays = {};
     Object.values(parlaysByMonth[month]).forEach(dateGroup => {
@@ -134,6 +133,7 @@ function populateSeasonAndMonths() {
     const bankColor = stats.bank > START_BANK ? "limegreen" : (stats.bank < START_BANK ? "red" : "gold");
 
     const btn = document.createElement("button");
+    btn.type = "button";
     btn.className = "month-toggle-btn";
     btn.innerHTML = `
       <span class="month-name">${month}</span>
@@ -147,7 +147,6 @@ function populateSeasonAndMonths() {
     parlaysContainer.className = "parlays-dropdown";
 
     btn.addEventListener("click", () => {
-      document.getElementById("seasonDropdown")?.classList.remove("show");
       document.querySelectorAll('.parlays-dropdown').forEach(el => {
         if (el !== parlaysContainer && el.id !== "seasonDropdown") el.classList.remove("show");
       });
@@ -162,10 +161,9 @@ function populateSeasonAndMonths() {
   // Season dropdown toggle
   const seasonButton = document.getElementById("seasonButton");
   seasonButton?.addEventListener("click", () => {
-    document.querySelectorAll('.parlays-dropdown').forEach(el => {
-      if (el.id !== "seasonDropdown") el.classList.remove("show");
-    });
-    document.getElementById("seasonDropdown")?.classList.toggle("show");
+    const dropdown = document.getElementById("seasonDropdown");
+    const isOpen = dropdown.classList.toggle("show");
+    seasonButton.setAttribute("aria-expanded", isOpen);
   });
 }
 

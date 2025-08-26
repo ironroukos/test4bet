@@ -1,41 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>4Bet | Road to Profit</title>
-
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
-
-  <!-- CSS -->
-  <link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>4Bet | Road to Profit</title>
+<!-- Google Fonts: Dancing Script -->
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+<!-- CSS -->
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>4Bet | Road to Profit</h1>
+<h1>4Bet | Road to Profit</h1>
 
-  <!-- Season Stats Button with Dropdown -->
-  <button class="season-btn" id="seasonButton">
-    <span class="season-title">Season 2025/2026</span>
-    <div>
-      <span class="season-stats">
-        <span id="seasonParlayStats">Parlay: Loading...</span> | 
-        <span id="seasonPickStats">Picks: Loading...</span>
-      </span>
-      <div class="bank-display" id="seasonBank">Bank: Loading...</div>
-    </div>
-  </button>
+<!-- Season Stats Button with Dropdown -->
+<button class="season-btn" id="seasonButton">
+  <span class="season-title">Season 2025/2026</span>
+  <span class="season-stats">
+    <span id="seasonWins">Parlay W: Loading...</span> | 
+    <span id="seasonLosses">Parlay L: Loading...</span> | 
+    <span id="seasonPickWins">Pick W: Loading...</span> | 
+    <span id="seasonPickLosses">Pick L: Loading...</span> | 
+    <span id="seasonBank">Bank: Loading...</span>
+  </span>
+</button>
 
-  <!-- Season Dropdown (Monthly Summary) -->
-  <div id="seasonDropdown" class="parlays-dropdown" style="display: none;"></div>
+<!-- Season Dropdown (Monthly Summary) -->
+<div id="seasonDropdown" class="parlays-dropdown" style="display: none;">
+  <!-- Monthly stats will be populated here -->
+</div>
 
-  <!-- Month buttons -->
-  <div id="monthButtons"></div>
-
-  <!-- Parlays container -->
-  <div id="parlaysContainer"></div>
-
-  <!-- JS -->
-  <script src="script.js"></script>
+<!-- Month buttons -->
+<div id="monthButtons"></div>
+<!-- Parlays container -->
+<div id="parlaysContainer"></div>
+<!-- JS -->
+<script src="script.js"></script>
 </body>
 </html>

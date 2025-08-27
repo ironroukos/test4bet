@@ -58,7 +58,7 @@ h1 {
 
 .month-stats, .season-stats {
   font-size: 1.25rem;
-  font-family: Arial, sans-serif;
+  font-family: 'Dancing Script', cursive;
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
@@ -118,6 +118,7 @@ h1 {
   flex: 2;
   text-align: center;
   font-size: 1rem;
+  font-family: 'Dancing Script', cursive;
 }
 
 .month-summary-bank {

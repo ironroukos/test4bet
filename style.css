@@ -190,33 +190,9 @@ h1 {
   background: rgba(255,0,0,0.2); 
 }
 .match-info { flex: 1; display: flex; flex-direction: column; gap: 4px; }
-.match-teams { 
-  font-weight: bold; 
-  font-size: 1rem; 
-  font-family: Arial, sans-serif;
-  color: #fff;
-  background: rgba(128,128,128,0.8);
-  padding: 6px 10px;
-  border-radius: 6px;
-}
-.match-pick { 
-  font-size: 0.9rem; 
-  font-family: Arial, sans-serif;
-  color: #fff;
-  background: rgba(128,128,128,0.8);
-  padding: 4px 8px;
-  border-radius: 4px;
-}
-.match-odds { 
-  font-weight: bold; 
-  font-family: Arial, sans-serif;
-  padding: 8px 12px; 
-  background: rgba(128,128,128,0.8); 
-  color: #fff;
-  border-radius: 6px; 
-  min-width: 50px; 
-  text-align: center; 
-}
+.match-teams { font-weight: bold; font-size: 1rem; }
+.match-pick { font-size: 0.9rem; opacity: 0.9; }
+.match-odds { font-weight: bold; padding: 8px 12px; background: rgba(255,255,255,0.2); border-radius: 6px; min-width: 50px; text-align: center; }
 .parlay.won .match-odds { background: rgba(0,255,0,0.2); color: limegreen; }
 .parlay.lost .match-odds { background: rgba(255,0,0,0.2); color: #ff6b6b; }
 

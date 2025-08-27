@@ -50,14 +50,14 @@ h1 {
 }
 
 .month-name, .season-title {
-  font-size: 2rem;
+  font-size: 1.75rem;
   white-space: nowrap;
   font-weight: 600;
   margin-bottom: 8px;
 }
 
 .month-stats, .season-stats {
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   font-family: 'Dancing Script', cursive;
   display: flex;
   flex-wrap: wrap;

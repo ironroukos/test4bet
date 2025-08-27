@@ -60,10 +60,10 @@ h1 {
   font-size: 1.5rem;
   font-family: 'Dancing Script', cursive;
   display: flex;
-  flex-wrap: wrap;
   gap: 8px;
   align-items: center;
   justify-content: center;
+  white-space: nowrap;
 }
 
 .bank-display {

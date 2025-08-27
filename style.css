@@ -119,11 +119,10 @@ h1 {
   text-align: center;
   font-size: 1.5rem;
   font-family: 'Dancing Script', cursive;
-   white-space: nowrap;
 }
 
 .month-summary-bank {
-  font-size: 1rem;
+  font-size: 1.25rem;
   font-weight: bold;
   margin-top: 6px;
   padding: 6px 10px;

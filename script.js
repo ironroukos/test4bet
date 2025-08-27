@@ -156,41 +156,7 @@ function populateSeasonAndMonths() {
 
     monthStatsMap[month] = { parlayWins, parlayLosses, pickWins, pickLosses, bank: finalBankForMonth };
   });
-
-  // Season dropdown
-  const seasonDropdown = document.getElementById("seasonDropdown");
-  if (seasonDropdown) {
-    seasonDropdown.innerHTML = "";
-    sortedMonths.forEach(month => {
-      const stats = monthStatsMap[month];
-      const bankColor = stats.bank > START_BANK ? "limegreen" : (stats.bank < START_BANK ? "red" : "gold");
-      const monthSummary = document.createElement("div");
-      monthSummary.className = "month-summary";
-      monthSummary.innerHTML = `
-        <span class="month-summary-name">${month}</span>
-        <span class="month-summary-stats">
-          Parlays WL: ${stats.parlayWins}-${stats.parlayLosses} | 
-          Picks WL: ${stats.pickWins}-${stats.pickLosses}
-        </span>
-        <span class="month-summary-bank">Bank: <span style="color:${bankColor}">${stats.bank.toFixed(2)}</span></span>
-      `;
-      seasonDropdown.appendChild(monthSummary);
-    });
-  }
-
-  const seasonButton = document.getElementById("seasonButton");
-  if (seasonButton) {
-    const newSeasonButton = seasonButton.cloneNode(true);
-    seasonButton.parentNode.replaceChild(newSeasonButton, seasonButton);
-    newSeasonButton.addEventListener("click", () => {
-      document.querySelectorAll('.parlays-dropdown').forEach(el => {
-        if (el.id !== 'seasonDropdown') el.style.display = "none";
-      });
-      const dropdown = document.getElementById("seasonDropdown");
-      if (dropdown) dropdown.style.display = dropdown.style.display === "none" ? "block" : "none";
-    });
-  }
-
+  
   const container = document.getElementById("monthButtons");
   if (container) {
     container.innerHTML = "";

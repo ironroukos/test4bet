@@ -37,8 +37,8 @@ async function fetchData() {
         pickResult: values[4] || last.pickResult || "",
         odds: parseFloat(values[5]) || last.odds || 0,
         parlayOdds: parseFloat(values[6]) || last.parlayOdds || 0,
-        parlayResult: values[7] || "",
-        bank: parseFloat(values[8]) || last.bank || 0
+        parlayResult: values[7] || ""
+        // 🔹 removed "bank" (we now calculate automatically)
       };
       last = {...last, ...obj};
       return obj;
@@ -53,37 +53,7 @@ async function fetchData() {
   }
 }
 
-// 🔹 Compute Parlay & Pick Stats
-function getParlayStats(parlays) {
-  let parlayWins = 0, parlayLosses = 0;
-  let pickWins = 0, pickLosses = 0;
-  let finalBank = START_BANK;
-
-  const sortedParlays = Object.entries(parlays).sort(([keyA, parlayA], [keyB, parlayB]) => {
-    const dateA = parseDate(parlayA[0].date);
-    const dateB = parseDate(parlayB[0].date);
-    return dateA - dateB;
-  });
-
-  sortedParlays.forEach(([key, parlay]) => {
-    const parlayResult = (parlay[0].parlayResult || "").toLowerCase();
-    if (parlayResult === "won") parlayWins++;
-    else if (parlayResult === "lost") parlayLosses++;
-
-    parlay.forEach(pick => {
-      const pickResult = (pick.pickResult || "").toLowerCase();
-      if (pickResult === "won") pickWins++;
-      else if (pickResult === "lost") pickLosses++;
-    });
-
-    const bankValue = Number(parlay[parlay.length - 1].bank);
-    if (!isNaN(bankValue)) finalBank = bankValue;
-  });
-
-  return { parlayWins, parlayLosses, pickWins, pickLosses, bank: finalBank };
-}
-
-// 🔹 Populate season & month stats
+// 🔹 Populate season & month stats with running bank
 function populateSeasonAndMonths() {
   const parlaysByMonth = {};
   const monthDates = {};
@@ -92,6 +62,7 @@ function populateSeasonAndMonths() {
     const jsDate = parseDate(item.date);
     if (!jsDate) return;
     const month = jsDate.toLocaleString('default', { month: 'long' });
+
     if (!parlaysByMonth[month]) parlaysByMonth[month] = {};
     if (!parlaysByMonth[month][item.date]) parlaysByMonth[month][item.date] = {};
     if (!parlaysByMonth[month][item.date][item.parlayOdds]) parlaysByMonth[month][item.date][item.parlayOdds] = [];
@@ -100,17 +71,52 @@ function populateSeasonAndMonths() {
     if (!monthDates[month] || jsDate > monthDates[month]) monthDates[month] = jsDate;
   });
 
-  let allParlays = {};
-  Object.values(parlaysByMonth).forEach(monthGroup => {
-    Object.values(monthGroup).forEach(dateGroup => {
+  const sortedMonths = Object.keys(parlaysByMonth).sort((a, b) => monthDates[a] - monthDates[b]);
+  const monthStatsMap = {};
+  let runningBank = START_BANK;
+
+  sortedMonths.forEach(month => {
+    let parlayWins = 0, parlayLosses = 0, pickWins = 0, pickLosses = 0;
+
+    Object.values(parlaysByMonth[month]).forEach(dateGroup => {
       Object.values(dateGroup).forEach(parlayArr => {
-        const key = parlayArr[0].date + "_" + parlayArr[0].parlayOdds;
-        allParlays[key] = parlayArr;
+        const parlayResult = (parlayArr[0].parlayResult || "").toLowerCase();
+        const odds = parseFloat(parlayArr[0].parlayOdds) || 0;
+
+        if (parlayResult === "won") {
+          parlayWins++;
+          runningBank += (odds - 1); // profit on 1 unit stake
+        } else if (parlayResult === "lost") {
+          parlayLosses++;
+          runningBank -= 1; // lost 1 unit stake
+        }
+
+        parlayArr.forEach(pick => {
+          const pickResult = (pick.pickResult || "").toLowerCase();
+          if (pickResult === "won") pickWins++;
+          else if (pickResult === "lost") pickLosses++;
+        });
       });
     });
+
+    monthStatsMap[month] = {
+      parlayWins,
+      parlayLosses,
+      pickWins,
+      pickLosses,
+      bank: runningBank // cumulative season bank at end of this month
+    };
   });
 
-  const seasonStats = getParlayStats(allParlays);
+  // === Season stats ===
+  const seasonStats = {
+    parlayWins: Object.values(monthStatsMap).reduce((a, m) => a + m.parlayWins, 0),
+    parlayLosses: Object.values(monthStatsMap).reduce((a, m) => a + m.parlayLosses, 0),
+    pickWins: Object.values(monthStatsMap).reduce((a, m) => a + m.pickWins, 0),
+    pickLosses: Object.values(monthStatsMap).reduce((a, m) => a + m.pickLosses, 0),
+    bank: runningBank // final running balance
+  };
+
   const currentBank = seasonStats.bank;
   const bankColor = currentBank > START_BANK ? "limegreen" : (currentBank < START_BANK ? "red" : "gold");
 
@@ -118,45 +124,7 @@ function populateSeasonAndMonths() {
   document.getElementById("seasonParlayRecord").innerText = `Parlays WL: ${seasonStats.parlayWins}-${seasonStats.parlayLosses}`;
   document.getElementById("seasonPickRecord").innerText = `Picks WL: ${seasonStats.pickWins}-${seasonStats.pickLosses}`;
 
-  const sortedMonths = Object.keys(parlaysByMonth).sort((a, b) => monthDates[a] - monthDates[b]);
-  const monthStatsMap = {};
-
-  sortedMonths.forEach(month => {
-    let monthParlays = {};
-    Object.values(parlaysByMonth[month]).forEach(dateGroup => {
-      Object.values(dateGroup).forEach(parlayArr => {
-        const key = parlayArr[0].date + "_" + parlayArr[0].parlayOdds;
-        monthParlays[key] = parlayArr;
-      });
-    });
-
-    let parlayWins = 0, parlayLosses = 0, pickWins = 0, pickLosses = 0;
-    Object.values(monthParlays).forEach(parlay => {
-      const parlayResult = (parlay[0].parlayResult || "").toLowerCase();
-      if (parlayResult === "won") parlayWins++;
-      else if (parlayResult === "lost") parlayLosses++;
-      parlay.forEach(pick => {
-        const pickResult = (pick.pickResult || "").toLowerCase();
-        if (pickResult === "won") pickWins++;
-        else if (pickResult === "lost") pickLosses++;
-      });
-    });
-
-    let finalBankForMonth = START_BANK;
-    const monthDatesArray = Object.keys(parlaysByMonth[month]).sort((a, b) => parseDate(b) - parseDate(a));
-    if (monthDatesArray.length > 0) {
-      const latestDate = monthDatesArray[0];
-      const latestDateParlays = Object.values(parlaysByMonth[month][latestDate]);
-      if (latestDateParlays.length > 0) {
-        const lastParlay = latestDateParlays[latestDateParlays.length - 1];
-        const bankValue = Number(lastParlay[lastParlay.length - 1].bank);
-        if (!isNaN(bankValue)) finalBankForMonth = bankValue;
-      }
-    }
-
-    monthStatsMap[month] = { parlayWins, parlayLosses, pickWins, pickLosses, bank: finalBankForMonth };
-  });
-  
+  // === Render months ===
   const container = document.getElementById("monthButtons");
   if (container) {
     container.innerHTML = "";
@@ -207,7 +175,7 @@ function populateSeasonAndMonths() {
   }
 }
 
-// 🔹 Render parlays for a month
+// 🔹 Render parlays for a month (unchanged)
 function renderParlaysForMonth(monthData, container) {
   const dateGroups = {};
   

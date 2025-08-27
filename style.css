@@ -107,7 +107,7 @@ h1 {
 
 .month-summary-name {
   font-family: 'Dancing Script', cursive;
-  font-size: 1.4rem;
+  font-size: 1.75rem;
   font-weight: 600;
   color: limegreen;
   flex: 1;
@@ -117,7 +117,7 @@ h1 {
 .month-summary-stats {
   flex: 2;
   text-align: center;
-  font-size: 1rem;
+  font-size: 1.5rem;
   font-family: 'Dancing Script', cursive;
    white-space: nowrap;
 }

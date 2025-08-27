@@ -94,6 +94,39 @@ h1 {
   display: block;
 }
 
+.month-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  margin: 8px 0;
+  background: rgba(255,255,255,0.05);
+  border-radius: 8px;
+  font-family: Arial, sans-serif;
+}
+
+.month-summary-name {
+  font-family: 'Dancing Script', cursive;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: limegreen;
+  flex: 1;
+  text-align: left;
+}
+
+.month-summary-stats {
+  flex: 2;
+  text-align: center;
+  font-size: 1rem;
+}
+
+.month-summary-bank {
+  flex: 1;
+  text-align: right;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
 /* =======================
    Parlay Cards
 ======================= */
@@ -157,9 +190,9 @@ h1 {
   background: rgba(255,0,0,0.2); 
 }
 
-.match-info { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+.match-info { flex: 1; display: flex; flex-direction: column; gap: 4px; }
 .match-teams { font-weight: bold; font-size: 1rem; }
-.match-pick-result { font-size: 0.9rem; opacity: 0.9; display: flex; align-items: center; gap: 6px; }
+.match-pick { font-size: 0.9rem; opacity: 0.9; }
 .match-odds { font-weight: bold; padding: 8px 12px; background: rgba(255,255,255,0.2); border-radius: 6px; min-width: 50px; text-align: center; }
 
 .parlay.won .match-odds { background: rgba(0,255,0,0.2); color: limegreen; }
@@ -197,7 +230,7 @@ h1 {
   .parlay-body { padding: 12px; }
   .parlay .match { padding: 10px; margin: 6px 0; }
   .match-teams { font-size: 0.95rem; }
-  .match-pick-result { font-size: 0.85rem; }
+  .match-pick { font-size: 0.85rem; }
   .match-odds { font-size: 1rem; padding: 6px 10px; }
 }
 
@@ -216,6 +249,60 @@ h1 {
   .parlay { max-width: 100%; margin: 12px auto; }
   .month-toggle-btn, .season-btn { flex-direction: row; justify-content: space-between; align-items: center; text-align: left; }
   .month-name, .season-title { margin-bottom: 0; }
-  .month-stats, .season-stats { justify-content: flex-end; }
+  .month-stats, .season-stats { justify-content: center; flex: 1; }
   .bank-display { margin-top: 0; margin-left: 12px; }
+  
+  /* Special layout for season button on desktop */
+  .season-btn {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    gap: 20px;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .season-btn .season-title {
+    text-align: left;
+    justify-self: start;
+  }
+  
+  .season-btn .season-stats {
+    justify-self: center;
+  }
+  
+  .season-btn .bank-display {
+    justify-self: end;
+    margin: 0;
+  }
+  
+  /* Apply same layout to month buttons */
+  .month-toggle-btn {
+    display: grid !important;
+    grid-template-columns: 1fr 2fr 1fr;
+    gap: 20px;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .month-toggle-btn .month-name {
+    text-align: left;
+    justify-self: start;
+    margin-bottom: 0;
+  }
+  
+  .month-toggle-btn .month-stats {
+    justify-self: center;
+  }
+  
+  .month-toggle-btn .bank-display {
+    justify-self: end;
+    margin: 0;
+  }
+  
+  /* Center align dropdowns */
+  .parlays-dropdown {
+    margin: 5px auto 0 auto;
+    width: 100%;
+    max-width: 800px;
+  }
 }

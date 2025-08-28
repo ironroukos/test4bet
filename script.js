@@ -14,6 +14,46 @@ function parseDate(ddmm) {
   return new Date(`${y}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`);
 }
 
+// 🔹 Proper CSV parser that handles quoted fields and commas
+function parseCSV(csvText) {
+  const lines = csvText.trim().split('\n');
+  const result = [];
+  
+  for (let line of lines) {
+    const row = [];
+    let current = '';
+    let inQuotes = false;
+    
+    for (let i = 0; i < line.length; i++) {
+      const char = line[i];
+      const nextChar = line[i + 1];
+      
+      if (char === '"') {
+        if (inQuotes && nextChar === '"') {
+          // Escaped quote
+          current += '"';
+          i++; // skip next quote
+        } else {
+          // Toggle quote mode
+          inQuotes = !inQuotes;
+        }
+      } else if (char === ',' && !inQuotes) {
+        // End of field
+        row.push(current.trim());
+        current = '';
+      } else {
+        current += char;
+      }
+    }
+    
+    // Add the last field
+    row.push(current.trim());
+    result.push(row);
+  }
+  
+  return result;
+}
+
 // 🔹 Fetch & parse Google Sheet (CSV version)
 async function fetchData() {
   try {
@@ -21,31 +61,59 @@ async function fetchData() {
     const res = await fetch(url);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const csvText = await res.text();
-    const [headerLine, ...rows] = csvText.trim().split('\n');
-    const headers = headerLine.split(',');
-    const bankIndex = headers.indexOf('Bank'); // Find the Bank column index
+    
+    // Use proper CSV parsing
+    const csvData = parseCSV(csvText);
+    const [headers, ...rows] = csvData;
+    
+    console.log('Headers:', headers); // Debug log
+    console.log('First few rows:', rows.slice(0, 3)); // Debug log
+    
+    // Find column indices
+    const dateIndex = headers.findIndex(h => h.toLowerCase().includes('date'));
+    const matchIndex = headers.findIndex(h => h.toLowerCase().includes('match'));
+    const matchResultIndex = headers.findIndex(h => h.toLowerCase().includes('match result'));
+    const pickIndex = headers.findIndex(h => h.toLowerCase().includes('pick') && !h.toLowerCase().includes('result'));
+    const pickResultIndex = headers.findIndex(h => h.toLowerCase().includes('pick result'));
+    const oddsIndex = headers.findIndex(h => h.toLowerCase().includes('odds') && !h.toLowerCase().includes('parlay'));
+    const parlayOddsIndex = headers.findIndex(h => h.toLowerCase().includes('parlay odds'));
+    const parlayResultIndex = headers.findIndex(h => h.toLowerCase().includes('parlay result'));
+    const bankIndex = headers.findIndex(h => h.toLowerCase().includes('bank'));
 
-    let bankSum = 0;
+    console.log('Column indices:', {
+      dateIndex, matchIndex, matchResultIndex, pickIndex, 
+      pickResultIndex, oddsIndex, parlayOddsIndex, parlayResultIndex, bankIndex
+    }); // Debug log
+
     let last = {};
     rawData = rows.map(row => {
-      const values = row.split(',');
       const obj = {
-        date: values[0] || last.date || "",
-        match: values[1] || last.match || "",
-        matchResult: values[2] || last.matchResult || "",
-        pick: values[3] || last.pick || "",
-        pickResult: values[4] || last.pickResult || "",
-        odds: parseFloat(values[5]) || last.odds || 0,
-        parlayOdds: parseFloat(values[6]) || last.parlayOdds || 0,
-        parlayResult: values[7] || "",
-        bank: bankIndex !== -1 && values[bankIndex] ? parseFloat(values[bankIndex]) : 0
+        date: row[dateIndex] || last.date || "",
+        match: row[matchIndex] || last.match || "",
+        matchResult: row[matchResultIndex] || last.matchResult || "",
+        pick: row[pickIndex] || last.pick || "",
+        pickResult: row[pickResultIndex] || last.pickResult || "",
+        odds: parseFloat(row[oddsIndex]) || last.odds || 0,
+        parlayOdds: parseFloat(row[parlayOddsIndex]) || last.parlayOdds || 0,
+        parlayResult: row[parlayResultIndex] || "",
+        bank: bankIndex !== -1 && row[bankIndex] ? parseFloat(row[bankIndex]) : 0
       };
-      last = {...last, ...obj};
+      
+      // Only update 'last' with non-empty values
+      Object.keys(obj).forEach(key => {
+        if (obj[key] !== "" && obj[key] !== 0) {
+          last[key] = obj[key];
+        }
+      });
+      
       return obj;
     }).filter(r => r.date && r.match && r.pick && r.odds);
 
+    console.log('Processed data:', rawData.slice(0, 3)); // Debug log
+
     // Calculate the total bank from the Bank column
-    bankSum = rawData.reduce((sum, row) => sum + (row.bank || 0), 0);
+    const bankSum = rawData.reduce((sum, row) => sum + (row.bank || 0), 0);
+    console.log('Total bank sum:', bankSum); // Debug log
 
     populateSeasonAndMonths(bankSum);
   } catch (err) {
